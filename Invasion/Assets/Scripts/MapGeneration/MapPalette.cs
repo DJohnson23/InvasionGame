@@ -2,15 +2,26 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-[CreateAssetMenu(fileName ="NewMapPallette", menuName = "MapGeneration/MapPallette")]
+[CreateAssetMenu(fileName = "NewMapPallette", menuName = "MapGeneration/MapPallette")]
+[System.Serializable]
 public class MapPalette : ScriptableObject
 {
+	[SerializeField]
+	public bool autoUpdate;
+	[SerializeField]
+	public MapTileSet tileSet;
+	[SerializeField]
 	public MapTile[] floorTiles = new MapTile[0];
-	public Vector3 floorTileSize = new Vector3(1, 0.1f, 1);
+	[SerializeField]
+	public Vector2 floorTileSize = new Vector2(1, 1);
 
-	public Vector3 wallTileSize = new Vector3(1, 1, 0.1f);
-	public GameObject wallTrim;
-	public GameObject wallTile;
+	[SerializeField]
+	public Vector2 wallTileSize = new Vector2(1, 1);
+	[SerializeField]
+	public MapTile wallTrim;
+	[SerializeField]
+	public MapTile wallTile;
 
-	public GameObject ceilingTile;
+	[SerializeField]
+	public MapTile ceilingTile;
 }

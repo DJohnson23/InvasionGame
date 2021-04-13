@@ -1,0 +1,123 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 617f37f0e3e3d164e89bd24bf33c7117, type: 3}
+  m_Name: BasePalette
+  m_EditorClassIdentifier: 
+  tileSet: {fileID: 11400000, guid: 3b9873e8c546f164a9d39c462feeffe9, type: 2}
+  floorTiles:
+  - selectionType: 0
+    constTextureIndex: 0
+    randomList: 
+    randomWeight: []
+    orientation: 0
+    ruleSet: 0100000002000000010000000200000001000000020000000200000002000000
+  - selectionType: 0
+    constTextureIndex: 6
+    randomList: 
+    randomWeight: []
+    orientation: 1
+    ruleSet: 0100000002000000020000000100000002000000020000000100000002000000
+  - selectionType: 0
+    constTextureIndex: 6
+    randomList: 
+    randomWeight: []
+    orientation: 2
+    ruleSet: 0200000001000000020000000100000002000000020000000200000001000000
+  - selectionType: 0
+    constTextureIndex: 6
+    randomList: 
+    randomWeight: []
+    orientation: 3
+    ruleSet: 0200000001000000010000000200000002000000010000000200000002000000
+  - selectionType: 0
+    constTextureIndex: 4
+    randomList: 
+    randomWeight: []
+    orientation: 0
+    ruleSet: 0100000002000000010000000100000001000000020000000100000002000000
+  - selectionType: 0
+    constTextureIndex: 4
+    randomList: 
+    randomWeight: []
+    orientation: 1
+    ruleSet: 0100000001000000020000000100000002000000020000000100000001000000
+  - selectionType: 0
+    constTextureIndex: 4
+    randomList: 
+    randomWeight: []
+    orientation: 2
+    ruleSet: 0200000001000000010000000100000002000000010000000200000001000000
+  - selectionType: 0
+    constTextureIndex: 4
+    randomList: 
+    randomWeight: []
+    orientation: 3
+    ruleSet: 0100000001000000010000000200000001000000010000000200000002000000
+  - selectionType: 0
+    constTextureIndex: 5
+    randomList: 
+    randomWeight: []
+    orientation: 0
+    ruleSet: 0100000001000000010000000100000001000000020000000100000001000000
+  - selectionType: 0
+    constTextureIndex: 5
+    randomList: 
+    randomWeight: []
+    orientation: 1
+    ruleSet: 0100000001000000010000000100000002000000010000000100000001000000
+  - selectionType: 0
+    constTextureIndex: 5
+    randomList: 
+    randomWeight: []
+    orientation: 2
+    ruleSet: 0100000001000000010000000100000001000000010000000200000001000000
+  - selectionType: 0
+    constTextureIndex: 5
+    randomList: 
+    randomWeight: []
+    orientation: 3
+    ruleSet: 0100000001000000010000000100000001000000010000000100000002000000
+  - selectionType: 1
+    constTextureIndex: 0
+    randomList: 000000000200000001000000
+    randomWeight:
+    - 10
+    - 0.1
+    - 0.1
+    orientation: 0
+    ruleSet: 0100000001000000010000000100000001000000010000000100000001000000
+  floorTileSize: {x: 1, y: 1}
+  wallTileSize: {x: 1, y: 1}
+  wallTrim:
+    selectionType: 0
+    constTextureIndex: 8
+    randomList: 
+    randomWeight: []
+    orientation: 0
+    ruleSet: 0000000000000000000000000000000000000000000000000000000000000000
+  wallTile:
+    selectionType: 1
+    constTextureIndex: 0
+    randomList: 000000000100000002000000
+    randomWeight:
+    - 1
+    - 1
+    - 6
+    orientation: 0
+    ruleSet: 0000000000000000000000000000000000000000000000000000000000000000
+  ceilingTile:
+    selectionType: 0
+    constTextureIndex: 7
+    randomList: 
+    randomWeight: []
+    orientation: 0
+    ruleSet: 0000000000000000000000000000000000000000000000000000000000000000

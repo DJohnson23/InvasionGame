@@ -1,19 +1,18 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+
 
 // Corner: Top/Bottom Right/Left
 // Edge: Vertical/Horizontal Positive/Negative
 public enum MapTileRuleArea
 {
-	TopLeft			= 6, // 110
-	TopMiddle		= 3, // 011
-	TopRight		= 7, // 111
-	LeftMiddle		= 0, // 000
-	RightMiddle		= 1, // 001
-	BottomLeft		= 4, // 100
-	BottomMiddle	= 2, // 010
-	BottomRight		= 5  // 101
+	TopLeft = 6, // 110
+	TopMiddle = 3, // 011
+	TopRight = 7, // 111
+	LeftMiddle = 0, // 000
+	RightMiddle = 1, // 001
+	BottomLeft = 4, // 100
+	BottomMiddle = 2, // 010
+	BottomRight = 5  // 101
 }
 
 public enum MapTileRule
@@ -32,11 +31,17 @@ public enum MapTileSelectionType
 [System.Serializable]
 public class MapTile
 {
+	[SerializeField]
 	public MapTileSelectionType selectionType;
-	public GameObject constantPrefab;
-	public GameObject[] randomList = new GameObject[0];
+	[SerializeField]
+	public int constTextureIndex;
+	[SerializeField]
+	public int[] randomList = new int[0];
+	[SerializeField]
 	public float[] randomWeight = new float[0];
-	public float extraRotation;
+	[SerializeField]
+	public int orientation;
+	[SerializeField]
 	MapTileRule[] ruleSet = new MapTileRule[8];
 
 	public MapTileRule CheckRule(MapTileRuleArea ruleArea)
@@ -49,11 +54,11 @@ public class MapTile
 		ruleSet[(int)ruleArea] = rule;
 	}
 
-	public GameObject GetRandomTile()
+	public int GetRandomTileIndex()
 	{
 		float totalWeight = 0;
 
-		foreach(float weight in randomWeight)
+		foreach (float weight in randomWeight)
 		{
 			totalWeight += weight;
 		}
@@ -61,11 +66,11 @@ public class MapTile
 		float val = Random.Range(0, totalWeight);
 		float sum = 0;
 
-		for(int i = 0; i < randomWeight.Length; i++)
+		for (int i = 0; i < randomWeight.Length; i++)
 		{
 			sum += randomWeight[i];
 
-			if(sum > val)
+			if (sum > val)
 			{
 				return randomList[i];
 			}
@@ -77,11 +82,11 @@ public class MapTile
 	public int GetPriority(Texture2D map, int x, int y)
 	{
 		int priority = 0;
-		for(int i = 0; i < 8; i++)
+		for (int i = 0; i < 8; i++)
 		{
 			MapTileRule curRule = ruleSet[i];
 
-			if(ruleSet[i] == MapTileRule.None)
+			if (ruleSet[i] == MapTileRule.None)
 			{
 				continue;
 			}
@@ -89,13 +94,13 @@ public class MapTile
 			int curX;
 			int curY;
 			//Corner
-			if((i & 4) == 4)
+			if ((i & 4) == 4)
 			{
 				curY = y + ((i & 2) == 2 ? 1 : -1);
 				curX = x + ((i & 1) == 1 ? 1 : -1);
 			}
 			//Edge Vertical
-			else if((i & 2) == 2)
+			else if ((i & 2) == 2)
 			{
 				curX = x;
 				curY = y + ((i & 1) == 1 ? 1 : -1);
@@ -107,16 +112,16 @@ public class MapTile
 				curX = x + ((i & 1) == 1 ? 1 : -1);
 			}
 
-			if(curX < 0 || curX > map.width - 1 || curY < 0 || curY > map.height - 1)
+			if (curX < 0 || curX > map.width - 1 || curY < 0 || curY > map.height - 1)
 			{
 				continue;
 			}
 
 			Color pixel = map.GetPixel(curX, curY);
 
-			if(pixel == Color.black)
+			if (pixel == Color.black)
 			{
-				if(curRule == MapTileRule.Full)
+				if (curRule == MapTileRule.Full)
 				{
 					priority++;
 				}
@@ -125,7 +130,7 @@ public class MapTile
 					priority--;
 				}
 			}
-			else if(curRule == MapTileRule.Empty)
+			else if (curRule == MapTileRule.Empty)
 			{
 				priority++;
 			}

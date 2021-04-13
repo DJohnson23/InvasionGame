@@ -3,48 +3,29 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEditor;
 
-[CustomEditor(typeof(MapGenerator))]
-public class MapGeneratorEditor : Editor
+namespace MapGenerationV2
 {
-	MapGenerator mapGen;
-
-	public override void OnInspectorGUI()
+	[CustomEditor(typeof(MapGenerator))]
+	public class MapGeneratorEditor : Editor
 	{
-		mapGen = (MapGenerator)target;
+		MapGenerator mapGen;
 
-		if(DrawDefaultInspector())
+		public override void OnInspectorGUI()
 		{
-			mapGen.RefreshMap();
-		}
+			mapGen = (MapGenerator)target;
 
-		GUIStyle style = GUI.skin.button;
-		style.alignment = TextAnchor.MiddleCenter;
+			if (DrawDefaultInspector() && mapGen.autoUpdate)
+			{
+				mapGen.RefreshMap();
+			}
 
-		if(GUILayout.Button("Generate Map"))
-		{
-			mapGen.RefreshMap();
-		}
+			GUIStyle style = GUI.skin.button;
+			style.alignment = TextAnchor.MiddleCenter;
 
-		if(GUILayout.Button("Save Meshes"))
-		{
-			SaveMeshes();
-		}
-	}
-
-	void SaveMeshes()
-	{
-		List<GameObject> floorList = mapGen.floorList;
-		List<GameObject> wallList = mapGen.wallList;
-		List<GameObject> ceilingList = mapGen.ceilingList;
-
-		Debug.Log(Application.dataPath);
-
-		for(int i = 0; i < floorList.Count; i++)
-		{
-			string path = Application.dataPath + "/Exports/Floor_" + i + ".obj";
-			GameObject floor = floorList[i];
-
-			ObjExporter.MeshToFile(floor.GetComponent<MeshFilter>(), path);
+			if (GUILayout.Button("Generate Map"))
+			{
+				mapGen.RefreshMap();
+			}
 		}
 	}
 }
