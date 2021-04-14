@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 617f37f0e3e3d164e89bd24bf33c7117, type: 3}
   m_Name: BasePalette
   m_EditorClassIdentifier: 
+  autoUpdate: 0
   tileSet: {fileID: 11400000, guid: 3b9873e8c546f164a9d39c462feeffe9, type: 2}
   floorTiles:
   - selectionType: 0
-    constTextureIndex: 0
+    constTextureIndex: 6
     randomList: 
     randomWeight: []
     orientation: 0
@@ -109,15 +110,17 @@ MonoBehaviour:
     constTextureIndex: 0
     randomList: 000000000100000002000000
     randomWeight:
-    - 1
-    - 1
+    - 2
+    - 0.1
     - 6
     orientation: 0
     ruleSet: 0000000000000000000000000000000000000000000000000000000000000000
   ceilingTile:
-    selectionType: 0
+    selectionType: 1
     constTextureIndex: 7
-    randomList: 
-    randomWeight: []
+    randomList: 0200000007000000
+    randomWeight:
+    - 1
+    - 5
     orientation: 0
     ruleSet: 0000000000000000000000000000000000000000000000000000000000000000

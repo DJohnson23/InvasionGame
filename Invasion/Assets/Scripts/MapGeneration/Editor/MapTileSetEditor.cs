@@ -20,6 +20,7 @@ namespace MapGenerationV2
 
             if(DrawDefaultInspector())
             {
+                EditorUtility.SetDirty(mtt);
                 mtt.Initalize();
             }
 

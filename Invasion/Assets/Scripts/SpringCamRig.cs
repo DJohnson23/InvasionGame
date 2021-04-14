@@ -7,7 +7,6 @@ public class SpringCamRig : MonoBehaviour
 	public Camera cameraTarget;
 	public Transform target;
 	public LayerMask checkLayerMask;
-	public float vacinityRadius = 1f;
 	public float maxCamSpeed = 1f;
 
 	Vector3 offset;
@@ -31,7 +30,6 @@ public class SpringCamRig : MonoBehaviour
 
 		Vector3 newLocation;
 
-		//if (Physics.OverlapSphere(realLocation, vacinityRadius, checkLayerMask).Length > 0 && Physics.Raycast(ray, out hit, distance, checkLayerMask))
 		if (Physics.Raycast(ray, out hit, distance, checkLayerMask))
 		{
 			newLocation = hit.point - direction * 0.5f;
@@ -50,6 +48,5 @@ public class SpringCamRig : MonoBehaviour
 		Gizmos.color = Color.red;
 
 		Gizmos.DrawLine(target.position, cameraTarget.transform.position);
-		Gizmos.DrawWireSphere(cameraTarget.transform.position, vacinityRadius);
 	}
 }

@@ -53,13 +53,18 @@ namespace MapGenerationV2
 			DrawWallTiles();
 			DrawCeilingTiles();
 
-			if (EditorGUI.EndChangeCheck() && palette.autoUpdate)
+			if (EditorGUI.EndChangeCheck())
 			{
-				MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+				EditorUtility.SetDirty(palette);
 
-				if (mapGen.mapPalette == palette)
+				if(palette.autoUpdate)
 				{
-					mapGen.RefreshMap();
+					MapGenerator mapGen = FindObjectOfType<MapGenerator>();
+					
+					if (mapGen.mapPalette == palette)
+					{
+						mapGen.RefreshMap();
+					}
 				}
 			}
 		}

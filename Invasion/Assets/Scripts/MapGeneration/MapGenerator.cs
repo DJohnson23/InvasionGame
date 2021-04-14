@@ -11,8 +11,10 @@ public class MapGenerator : MonoBehaviour
 	public MapPalette mapPalette;
 	public int wallHeight = 5;
 	public int randomSeed = 1234;
+	[Range(0, 1)]
+	public float shadowIntensity = 0.3f;
 
-	public Material mainMat;
+	Material mainMat;
 
 	// Start is called before the first frame update
 	void Start()
@@ -32,6 +34,10 @@ public class MapGenerator : MonoBehaviour
 
 	void CreateMap()
 	{
+		mainMat = new Material(Shader.Find("Unlit/VoxelShading"));
+		mainMat.SetFloat("_ShadowIntensity", shadowIntensity);
+		mainMat.SetTexture("_MainTex", mapPalette.tileSet.texture);
+
 		Random.InitState(randomSeed);
 
 		CreateFloorAndCeiling();

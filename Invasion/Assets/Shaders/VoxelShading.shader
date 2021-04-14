@@ -3,7 +3,7 @@
     Properties
     {
         _MainTex ("Texture", 2D) = "white" {}
-        _ShadowIntensity ("Shadow Intensity", Range(0, 1)) = 0.5
+        _ShadowIntensity("Shadow Intensity", Range(0, 1)) = 0.5
     }
     SubShader
     {
@@ -39,6 +39,7 @@
 
             float _ShadowIntensity;
 
+
             v2f vert (appdata v)
             {
                 v2f o;
@@ -55,7 +56,7 @@
                 float4 lightDirection = _WorldSpaceLightPos0;
 
                 float lightAtten = saturate(dot(lightDirection.xyz, i.worldNormal));
-                float voxelLightAtten = 1 - ((1 - lightAtten) * _ShadowIntensity);
+                float voxelLightAtten = 1 + _ShadowIntensity * (lightAtten - 1);
 
                 col *= voxelLightAtten;
                 
