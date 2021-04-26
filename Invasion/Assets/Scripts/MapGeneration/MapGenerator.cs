@@ -13,6 +13,7 @@ public class MapGenerator : MonoBehaviour
 	public int randomSeed = 1234;
 	[Range(0, 1)]
 	public float shadowIntensity = 0.3f;
+	public bool drawBackWalls = true;
 
 	Material mainMat;
 
@@ -92,7 +93,7 @@ public class MapGenerator : MonoBehaviour
 					CreateWallColumn(vertices, triangles, uvs, trimPoints);
 				}
 
-				if (y == mapTex.height - 1 || mapTex.GetPixel(x, y + 1) != Color.black)
+				if ((drawBackWalls && y == mapTex.height - 1) || mapTex.GetPixel(x, y + 1) != Color.black)
 				{
 					Vector3[] trimPoints = new Vector3[4];
 
@@ -105,7 +106,7 @@ public class MapGenerator : MonoBehaviour
 					CreateWallColumn(vertices, triangles, uvs, trimPoints);
 				}
 
-				if (y == 0 || mapTex.GetPixel(x, y - 1) != Color.black)
+				if ((drawBackWalls && y == 0) || mapTex.GetPixel(x, y - 1) != Color.black)
 				{
 					Vector3[] trimPoints = new Vector3[4];
 
@@ -259,6 +260,7 @@ public class MapGenerator : MonoBehaviour
 	{
 		mesh.RecalculateNormals();
 		GameObject newObj = new GameObject(name);
+		newObj.transform.position = transform.position;
 		MeshRenderer renderer = newObj.AddComponent<MeshRenderer>();
 		MeshFilter filter = newObj.AddComponent<MeshFilter>();
 		MeshCollider collider = newObj.AddComponent<MeshCollider>();
@@ -302,12 +304,12 @@ public class MapGenerator : MonoBehaviour
 			return null;
 		}
 
-		int highest = tiles[0].GetPriority(mapTex, x, y);
+		int highest = tiles[0].GetPriority(mapTex, x, y, drawBackWalls);
 		int highIndex = 0;
 
 		for (int i = 1; i < tiles.Length; i++)
 		{
-			int priority = tiles[i].GetPriority(mapTex, x, y);
+			int priority = tiles[i].GetPriority(mapTex, x, y, drawBackWalls);
 
 			if (priority > highest)
 			{

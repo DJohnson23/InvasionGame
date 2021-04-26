@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 617f37f0e3e3d164e89bd24bf33c7117, type: 3}
   m_Name: BasePalette
   m_EditorClassIdentifier: 
-  autoUpdate: 0
+  autoUpdate: 1
   tileSet: {fileID: 11400000, guid: 3b9873e8c546f164a9d39c462feeffe9, type: 2}
   floorTiles:
   - selectionType: 0

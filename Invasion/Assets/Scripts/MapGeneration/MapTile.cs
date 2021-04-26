@@ -79,7 +79,7 @@ public class MapTile
 		return randomList[randomList.Length - 1];
 	}
 
-	public int GetPriority(Texture2D map, int x, int y)
+	public int GetPriority(Texture2D map, int x, int y, bool drawBackWalls = true)
 	{
 		int priority = 0;
 		for (int i = 0; i < 8; i++)
@@ -93,31 +93,46 @@ public class MapTile
 
 			int curX;
 			int curY;
+
 			//Corner
 			if ((i & 4) == 4)
 			{
 				curY = y + ((i & 2) == 2 ? 1 : -1);
 				curX = x + ((i & 1) == 1 ? 1 : -1);
 			}
-			//Edge Vertical
+			//Edge Horizontal
 			else if ((i & 2) == 2)
 			{
 				curX = x;
 				curY = y + ((i & 1) == 1 ? 1 : -1);
 			}
-			//Edge Horizontal
+			//Edge Vertical
 			else
 			{
 				curY = y;
 				curX = x + ((i & 1) == 1 ? 1 : -1);
 			}
 
-			if (curX < 0 || curX > map.width - 1 || curY < 0 || curY > map.height - 1)
+			Color pixel;
+			if(curX < 0 || curX > map.width - 1)
 			{
-				continue;
+				pixel = Color.white;
 			}
-
-			Color pixel = map.GetPixel(curX, curY);
+			else if(curY < 0 || curY > map.height - 1)
+			{
+				if(drawBackWalls)
+				{
+					pixel = Color.white;
+				}
+				else
+				{
+					pixel = Color.black;
+				}
+			}
+			else
+			{
+				pixel = map.GetPixel(curX, curY);
+			}
 
 			if (pixel == Color.black)
 			{

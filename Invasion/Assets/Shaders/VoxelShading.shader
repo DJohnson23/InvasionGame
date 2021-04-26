@@ -30,8 +30,9 @@
             struct v2f
             {
                 float2 uv : TEXCOORD0;
+                UNITY_FOG_COORDS(1)
                 float4 vertex : SV_POSITION;
-                float3 worldNormal : TEXCOORD1;
+                float3 worldNormal : TEXCOORD2;
             };
 
             sampler2D _MainTex;
@@ -46,6 +47,7 @@
                 o.vertex = UnityObjectToClipPos(v.vertex);
                 o.uv = TRANSFORM_TEX(v.uv, _MainTex);
                 o.worldNormal = UnityObjectToWorldNormal(v.normal);
+                UNITY_TRANSFER_FOG(o, o.vertex);
                 return o;
             }
 
@@ -59,6 +61,7 @@
                 float voxelLightAtten = 1 + _ShadowIntensity * (lightAtten - 1);
 
                 col *= voxelLightAtten;
+                UNITY_APPLY_FOG(i.fogCoord, col);
                 
                 return col;
             }
