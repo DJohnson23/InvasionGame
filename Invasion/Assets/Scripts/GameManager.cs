@@ -7,7 +7,10 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Health))]
 public class GameManager : MonoBehaviour
 {
+    public static int enemiesLeft { get; private set; } = 0;
+    public static float mouseSensitivity { get; private set; } = 2.5f;
     public static bool paused { get; private set; } = false;
+    public static GameManager instance { get; private set; }
 
     public GameObject pauseUI;
     public GameObject gameUI;
@@ -16,7 +19,13 @@ public class GameManager : MonoBehaviour
     bool loadingScene = false;
     AsyncOperation loadOperation;
 
-    Health health;
+    public Health health;
+    public Health shield;
+    public Text ammoText;
+    public Text reloadText;
+    public Text enemiesLeftText;
+    public Slider mouseSensitivitySlider;
+
 
     private void Awake()
     {
@@ -28,6 +37,7 @@ public class GameManager : MonoBehaviour
         }
         else
         {
+            instance = this;
             DontDestroyOnLoad(gameObject);
         }
     }
@@ -39,10 +49,12 @@ public class GameManager : MonoBehaviour
             pauseUI.SetActive(false);
         }
 
+        reloadText.gameObject.SetActive(false);
         paused = false;
         Time.timeScale = 1;
         health = GetComponent<Health>();
         fadeAnimator.gameObject.SetActive(false);
+        mouseSensitivity = mouseSensitivitySlider.value;
     }
 
     private void Update()
@@ -50,9 +62,67 @@ public class GameManager : MonoBehaviour
         HandlePause();
     }
 
+    public void StartReloading()
+    {
+        reloadText.gameObject.SetActive(true);
+    }
+
+    public void StopReloading()
+    {
+        reloadText.gameObject.SetActive(false);
+    }
+
+    public void UpdateAmmo(int ammo)
+    {
+        ammoText.text = "x " + ammo;
+    }
+
+    public bool HealPlayer(int amount)
+    {
+        if(health.health == health.MaxHealth)
+        {
+            return false;
+        }
+
+        health.Heal(amount);
+        return true;
+    }
+
+    public void OnMouseSensitivityChanged()
+    {
+        mouseSensitivity = mouseSensitivitySlider.value;
+    }
+
+    public bool AddShield(int amount)
+    {
+        if(shield.health == shield.MaxHealth)
+        {
+            return false;
+        }
+
+        shield.Heal(amount);
+        return true;
+    }
+
     public void DamagePlayer(float damage)
     {
-        health.TakeDamage(damage);
+        float damageLeft = damage;
+
+        if(shield.health > 0)
+        {
+            damageLeft = damage - shield.health;
+            shield.TakeDamage(damage);
+        }
+
+        if(damageLeft > 0)
+        {
+            health.TakeDamage(damageLeft);
+        }
+
+        if(health.health <= 0)
+        {
+            OnDeath();
+        }
     }
 
     public void OnDeath()
@@ -63,6 +133,18 @@ public class GameManager : MonoBehaviour
         StartCoroutine(DelayRestart(1));
     }
 
+    public static void AddEnemy()
+    {
+        enemiesLeft++;
+        instance.enemiesLeftText.text = "x " + enemiesLeft;
+    }
+
+    public static void RemoveEnemy()
+    {
+        enemiesLeft--;
+        instance.enemiesLeftText.text = "x " + enemiesLeft;
+    }
+    
     IEnumerator DelayRestart(float seconds)
     {
         yield return new WaitForSeconds(seconds);
@@ -82,6 +164,7 @@ public class GameManager : MonoBehaviour
     {
         fadeAnimator.SetTrigger("transition");
         health.SetHealth(health.MaxHealth);
+        shield.SetHealth(0);
         StartCoroutine(HideAfterFade(1));
     }
 
@@ -152,5 +235,7 @@ public class GameManager : MonoBehaviour
             TogglePause();
         }
         SceneManager.LoadScene(0);
+        health.SetHealth(health.MaxHealth);
+        shield.SetHealth(0);
     }
 }

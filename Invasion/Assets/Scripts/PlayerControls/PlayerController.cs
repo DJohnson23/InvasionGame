@@ -7,7 +7,6 @@ public class PlayerController : Damageable
 {
 	public float speed = 2;
 	public float smoothRotSpeed = 100;
-	public float mouseSensitivity = 1;
 	public float maxCamRot = 30f;
 	public Camera playerCamera;
 	public Weapon currentWeapon;
@@ -27,7 +26,8 @@ public class PlayerController : Damageable
 	{
 		Cursor.lockState = CursorLockMode.Locked;
 		charController = GetComponent<CharacterController>();
-		FindObjectOfType<GameManager>().SetGameUIActive(true);
+		GameManager.instance.SetGameUIActive(true);
+		GameManager.instance.UpdateAmmo(currentWeapon.maxAmmo);
 		yRotation = transform.eulerAngles.y;
 	}
 
@@ -67,6 +67,8 @@ public class PlayerController : Damageable
 
 	void HandleLook()
 	{
+		float mouseSensitivity = GameManager.mouseSensitivity;
+
 		yRotation += Input.GetAxis("Mouse X") * mouseSensitivity * 100 * Time.deltaTime;
 		xRotation += -Input.GetAxis("Mouse Y") * mouseSensitivity * 100 * Time.deltaTime;
 
@@ -77,30 +79,64 @@ public class PlayerController : Damageable
 
 	void HandleWeapon()
 	{
-
 		if(Input.GetButtonDown("Fire1") && currentWeapon.canShoot)
 		{
-			RaycastHit hit;
-			Vector3 direction = playerCamera.transform.forward;
-
-			if (Physics.Raycast(playerCamera.transform.position, direction, out hit, currentWeapon.range, shootMask))
+			if(currentWeapon.reloading)
 			{
-				Damageable hitObj = hit.collider.GetComponent<Damageable>();
-
-				if(hitObj != null)
+				if(currentWeapon.ammo > 0)
 				{
-					hitObj.TakeDamage(currentWeapon.damage, hit.point, playerCamera.transform.forward);
-				}
-				else {
-
-					Vector3 reflection = Vector3.Reflect(direction, hit.normal);
-					GameObject newSpark = Instantiate(sparkParticle, hit.point, Quaternion.LookRotation(reflection, Vector3.up));
-					Destroy(newSpark, 2);
+					currentWeapon.CancelReload();
+					GameManager.instance.StopReloading();
+					ShootWeapon();
 				}
 			}
-
-			currentWeapon.Shoot();
+			else
+			{
+				ShootWeapon();
+			}
 		}
+
+		if(!currentWeapon.reloading && Input.GetKeyDown(KeyCode.R))
+		{
+			currentWeapon.Reload();
+		}
+	}
+
+	void ShootWeapon()
+	{
+		RaycastHit hit;
+		Vector3 direction = playerCamera.transform.forward;
+
+		if (Physics.Raycast(playerCamera.transform.position, direction, out hit, currentWeapon.range, shootMask))
+		{
+			Damageable hitObj = hit.collider.GetComponent<Damageable>();
+
+			if (hitObj != null)
+			{
+				hitObj.TakeDamage(currentWeapon.damage, hit.point, playerCamera.transform.forward);
+			}
+			else
+			{
+
+				Vector3 reflection = Vector3.Reflect(direction, hit.normal);
+				GameObject newSpark = Instantiate(sparkParticle, hit.point, Quaternion.LookRotation(reflection, Vector3.up));
+				Destroy(newSpark, 2);
+			}
+		}
+
+		currentWeapon.Shoot();
+
+		GameManager.instance.UpdateAmmo(currentWeapon.ammo);
+	}
+
+	public void OnReloadStart()
+	{
+		GameManager.instance.StartReloading();
+	}
+	public void OnReloadComplete()
+	{
+		GameManager.instance.StopReloading();
+		GameManager.instance.UpdateAmmo(currentWeapon.ammo);
 	}
 
 	void HandlePhysics()

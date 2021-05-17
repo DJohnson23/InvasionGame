@@ -19,6 +19,7 @@ public class Health : MonoBehaviour
     public Slider healthbar;
     public Gradient colorGradient;
     public bool showAlways = false;
+    public bool startAtMax = true;
     public float showCooldown = 1f;
 
     Image healthbarFill;
@@ -36,7 +37,10 @@ public class Health : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        health = maxHealth;
+        if(startAtMax)
+        {
+            health = maxHealth;
+        }
         InitHealthbar();
     }
 
@@ -75,6 +79,7 @@ public class Health : MonoBehaviour
         }
 
         health -= damage;
+        health = Mathf.Clamp(health, 0, maxHealth);
 
         float perc = Mathf.InverseLerp(0f, maxHealth, health);
 
@@ -91,18 +96,13 @@ public class Health : MonoBehaviour
                 showHealthbarCooldown = StartCoroutine(ShowBarCooldown());
             }
         }
-
-        if(isDead)
-        {
-            healthbarFill.gameObject.SetActive(false);
-            SendMessage("OnDeath");
-        }
     }
 
     void UpdateBar(float t)
     {
         healthbar.value = t;
         healthbarFill.color = colorGradient.Evaluate(t);
+        healthbarFill.gameObject.SetActive(health > 0);
     }
 
     void UpdateBar()
@@ -135,13 +135,13 @@ public class Health : MonoBehaviour
 
     public void SetHealth(int newHealth)
     {
-        if(isDead && newHealth > 0)
-        {
-            healthbarFill.gameObject.SetActive(true);
-        }
-
-        health = newHealth;
+        health = Mathf.Clamp(newHealth, 0, maxHealth);
 
         UpdateBar();
+    }
+
+    public void Heal(int amount)
+    {
+        SetHealth(health + amount);
     }
 }

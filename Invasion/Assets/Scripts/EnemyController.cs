@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-[RequireComponent(typeof(NavMeshAgent))]
-[RequireComponent(typeof(Health))]
+[RequireComponent(typeof(NavMeshAgent), typeof(Health))]
 public class EnemyController : Damageable
 {
     enum EnemyState
@@ -46,6 +45,10 @@ public class EnemyController : Damageable
     public GameObject weaponProjectile;
     public float alertRange = 20f;
 
+    public AudioClip hitSound;
+    public AudioClip shotSound;
+    public AudioClip deathSound;
+
     public bool IsDead
     {
         get
@@ -75,6 +78,7 @@ public class EnemyController : Damageable
         playerInView = false;
         agent.speed = walkSpeed;
         health = GetComponent<Health>();
+        GameManager.AddEnemy();
     }
 
     // Update is called once per frame
@@ -106,7 +110,9 @@ public class EnemyController : Damageable
         state = EnemyState.Dead;
         animator.SetTrigger("die");
         agent.SetDestination(transform.position);
+        AudioSource.PlayClipAtPoint(deathSound, transform.position);
         Destroy(gameObject, 3);
+        GameManager.RemoveEnemy();
     }
 
     void Search()
@@ -286,11 +292,25 @@ public class EnemyController : Damageable
         newProjectile.damage = weapon.damage;
         newProjectile.range = weapon.range;
         newProjectile.targetMask = targetMask;
+
+        AudioSource.PlayClipAtPoint(shotSound, transform.position);
     }
 
     public override void TakeDamage(float damage)
     {
+        AudioSource.PlayClipAtPoint(hitSound, transform.position);
+
+        if(IsDead)
+        {
+            return;
+        }
+
         health.TakeDamage(damage);
+
+        if(health.health <= 0)
+        {
+            OnDeath();
+        }
     }
 
     public override void TakeDamage(float damage, Vector3 hitPosition, Vector3 hitDirection)
@@ -301,6 +321,11 @@ public class EnemyController : Damageable
         {
             GameObject newObj = Instantiate(bloodParticle, hitPosition, Quaternion.LookRotation(-hitDirection, Vector3.up));
             Destroy(newObj, 2);
+        }
+
+        if(IsDead)
+        {
+            return;
         }
 
         if(state == EnemyState.Searching)

@@ -71,6 +71,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8435837320368309696}
   - component: {fileID: 4600250207675308880}
+  - component: {fileID: 296449594}
   m_Layer: 0
   m_Name: Revolver
   m_TagString: Untagged
@@ -111,6 +112,106 @@ MonoBehaviour:
   damage: 5
   muzzleFlash: {fileID: 398280353536079405, guid: 3497b3c8749ce1144988b2a0bded63aa, type: 3}
   attackSpeed: 30
+  reloadTime: 1
+  maxAmmo: 6
+  shootSound: {fileID: 8300000, guid: dab2bcc51053c164fa4a831b23fa70e2, type: 3}
+  reloadSound: {fileID: 8300000, guid: 7c65f9e44bcda45458097d5d7b6407c8, type: 3}
+--- !u!82 &296449594
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7637790066361579292}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &8631815833620692229
 GameObject:
   m_ObjectHideFlags: 0
@@ -278,7 +379,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   smoothRotSpeed: 100
-  mouseSensitivity: 4
+  mouseSensitivity: 2
   maxCamRot: 60
   playerCamera: {fileID: 8631815833620692231}
   currentWeapon: {fileID: 4600250207675308880}
@@ -330,6 +431,7 @@ MonoBehaviour:
     m_NumColorKeys: 3
     m_NumAlphaKeys: 2
   showAlways: 1
+  startAtMax: 1
   showCooldown: 1
 --- !u!1001 &3399251261707110172
 PrefabInstance:
